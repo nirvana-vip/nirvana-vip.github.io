@@ -7,12 +7,25 @@
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="icon" href="images/favicon.png" type="image/png">
+    <script>
+        function playAudio() {
+            const noiseAudio = document.getElementById('noise-audio');
+            const gunshotAudio = document.getElementById('gunshot-audio');
+            
+            // Play gunshot audio
+            gunshotAudio.play();
+
+            // Check if noise audio is not already playing and start it
+            if (noiseAudio.paused) {
+                noiseAudio.play();
+            }
+        }
+    </script>
 </head>
 
-<body>
+<body onclick="playAudio()">
     <h1>Σ>―(つ﹏✿)→      (╯︵╰,)   ♪♬  ♪   (－‸ლ)  ✺</h1>
     <img src="images/teke.png" alt="teke" style="max-width: 100%; height: auto;">
-    
     
     <iframe 
         width="960" 
@@ -46,18 +59,20 @@
 
     <img src="images/smurffuneral.png" alt="smurf funeral" style="max-width: 100%; height: auto;">
 
+    <img src="images/minotaur.png" alt="minotaur" style="max-width: 100%; height: auto;">
+
     <img src="images/wheat1.png" alt="Overlay Image" class="overlay">
 
     <img src="images/skull.png" alt="Overlay Image" class="overlay2">
 
-
-    <audio autoplay loop>
+    <audio id="noise-audio" autoplay loop>
         <source src="audio/noise1.mp3" type="audio/mp3">
         Your browser does not support the audio element.
     </audio>
 
-
-
+    <audio id="gunshot-audio">
+        <source src="audio/gunshot.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
 </body>
-
 </html>
