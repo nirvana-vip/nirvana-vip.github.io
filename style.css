@@ -11,3 +11,14 @@ h1 {
     color: #d10707; /* Set header color to a red */
     text-align: center; /* Center the header */
 }
+
+.overlay {
+    position: fixed;
+    top: 260px;  /* Adjust to your desired position */
+    left: 50%;  /* Centers horizontally */
+    transform: translateX(-50%); /* Centers the image exactly */
+    z-index: 9999;  /* Ensures the image is on top of other content */
+    width: 1920px;  /* Adjust width */
+    height: auto;  /* Maintain aspect ratio */
+    pointer-events: none;  /* Prevent the image from blocking interaction with other elements */
+}
