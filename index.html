@@ -7,20 +7,9 @@
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="icon" href="images/favicon.png" type="image/png">
-    <script>
-        function playAudio() {
-            const noiseAudio = document.getElementById('noise-audio');
-            const gunshotAudio = document.getElementById('gunshot-audio');
-            
-            // Play gunshot audio
-            gunshotAudio.play();
 
-            // Check if noise audio is not already playing and start it
-            if (noiseAudio.paused) {
-                noiseAudio.play();
-            }
-        }
-    </script>
+    
+
 </head>
 
 <body onclick="playAudio()">
@@ -37,6 +26,8 @@
         allowfullscreen>
     </iframe>
 
+    <img src="images/cat.png" alt="cat" style="max-width: 100%; height: auto;">
+
     <iframe 
         width="960" 
         height="540" 
@@ -46,6 +37,9 @@
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
         allowfullscreen>
     </iframe>
+
+    <img src="images/ea.png" alt="ea" style="width: 200px; height: auto;">
+
 
     <iframe 
         width="960" 
@@ -74,5 +68,21 @@
         <source src="audio/gunshot.mp3" type="audio/mp3">
         Your browser does not support the audio element.
     </audio>
+
+    <script>
+        function playAudio() {
+            const noiseAudio = document.getElementById('noise-audio');
+            const gunshotAudio = document.getElementById('gunshot-audio');
+            
+            // Play gunshot audio
+            gunshotAudio.play();
+
+            // Check if noise audio is not already playing and start it
+            if (noiseAudio.paused) {
+                noiseAudio.play();
+            }
+        }
+    </script>
+
 </body>
 </html>
