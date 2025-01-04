@@ -3,7 +3,7 @@ body {
     background-image: url('images/background.png');
     background-size: cover; /* Ensures the image covers the entire viewport */
     background-position: center; /* Centers the image */
-    background-repeat: no-repeat; /* Prevents the image from repeating */
+    background-repeat: repeat; /* Prevents the image from repeating */
 }
 
 h1 {
@@ -19,6 +19,17 @@ h1 {
     transform: translateX(-50%); /* Centers the image exactly */
     z-index: 9999;  /* Ensures the image is on top of other content */
     width: 1920px;  /* Adjust width */
+    height: auto;  /* Maintain aspect ratio */
+    pointer-events: none;  /* Prevent the image from blocking interaction with other elements */
+}
+
+.overlay2 {
+    position: fixed;
+    top: 0px;  /* Adjust to your desired position */
+    left: 4%;  /* Centers horizontally */
+    transform: translateX(-50%); /* Centers the image exactly */
+    z-index: 9999;  /* Ensures the image is on top of other content */
+    width: 200px;  /* Adjust width */
     height: auto;  /* Maintain aspect ratio */
     pointer-events: none;  /* Prevent the image from blocking interaction with other elements */
 }
