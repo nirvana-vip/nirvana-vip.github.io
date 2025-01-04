@@ -1,4 +1,5 @@
 body {
+    cursor: crosshair;
     background-image: url('images/background.png');
     background-size: cover; /* Ensures the image covers the entire viewport */
     background-position: center; /* Centers the image */
@@ -7,6 +8,6 @@ body {
 
 h1 {
     font-family: 'Helvetica', sans-serif; /* Set a different font for the header */
-    color: #ff6347; /* Set header color to a tomato red */
+    color: #d10707; /* Set header color to a red */
     text-align: center; /* Center the header */
 }
