@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chatwheel Editor</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .container h1 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #333;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #555;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    .preview {
+      background: #f9f9f9;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-family: monospace;
+      color: #333;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Chatwheel Editor</h1>
+    <label for="playerName">Player Name</label>
+    <input type="text" id="playerName" placeholder="Enter player name">
+    
+    <label for="message">Message</label>
+    <input type="text" id="message" placeholder="Enter message">
+
+    <div class="preview" id="preview">
+      playerchatwheel CW.1 "Ping Site A 
+
+      [ALL] Player: message
+    </div>
+    
+    <button onclick="copyToClipboard()">Copy to Clipboard</button>
+  </div>
+
+  <script>
+    const playerInput = document.getElementById('playerName');
+    const messageInput = document.getElementById('message');
+    const preview = document.getElementById('preview');
+
+    function updatePreview() {
+      const player = playerInput.value || 'Player';
+      const message = messageInput.value || 'message';
+
+      preview.textContent = `playerchatwheel CW.1 "Ping Site A \n\n[ALL] \u0003${player}\u0001: ${message}`;
+    }
+
+    playerInput.addEventListener('input', updatePreview);
+    messageInput.addEventListener('input', updatePreview);
+
+    function copyToClipboard() {
+      const textToCopy = preview.textContent;
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        alert('Copied to clipboard!');
+      }).catch(err => {
+        alert('Failed to copy: ' + err);
+      });
+    }
+  </script>
+</body>
+</html>
