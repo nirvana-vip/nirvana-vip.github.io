@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,10 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ecilhlja🍃</title>
   <style>
-    
-    
-    body {
+    * {
       cursor: crosshair !important;
+    }  
+
+    body {
       font-family: Arial, sans-serif;
       background-image: url('../images/background.jpg');
       background-color: #ffffff;
@@ -23,7 +21,6 @@
     }
 
     .container {
-      cursor: crosshair !important;
       background: #ffffffa4;
       padding: 20px;
       border-radius: 10px;
@@ -33,7 +30,6 @@
     }
 
     .container h1 {
-      cursor: crosshair !important;
       font-size: 1.5rem;
       margin-bottom: 20px;
       text-align: center;
@@ -41,7 +37,6 @@
     }
 
     label {
-      cursor: crosshair !important;
       display: block;
       font-weight: bold;
       margin-bottom: 5px;
@@ -49,7 +44,6 @@
     }
 
     input[type="text"], select {
-      cursor: crosshair !important;
       width: 100%;
       padding: 10px;
       margin-bottom: 15px;
@@ -59,7 +53,6 @@
     }
 
     .preview {
-      cursor: crosshair !important;
       background: #f9f9f9;
       padding: 10px;
       margin-bottom: 15px;
@@ -70,14 +63,12 @@
     }
 
     .flex-buttons {
-      cursor: crosshair !important;
       display: flex;
       justify-content: space-between;
       margin-bottom: 15px;
     }
 
     button {
-      cursor: crosshair !important;
       width: 48%;
       padding: 10px;
       background: #ff3c3c;
@@ -109,11 +100,12 @@
 
     <img src="../images/skull.png" alt="Overlay Image" class="overlay2" style="width: 200px; height: auto; display: block; margin: 0 auto;">
 
-
     <div class="flex-buttons">
       <button id="ctButton" onclick="setTeam('CT')">CT</button>
       <button id="tButton" onclick="setTeam('T')">T</button>
     </div>
+
+
 
     <label for="playerColor">Player Color</label>
     <select id="playerColor" onchange="updatePreview()">
@@ -126,7 +118,12 @@
 
     <label for="playerName">Player Name</label>
     <input type="text" id="playerName" placeholder="Enter player name">
-    
+
+    <label for="savedPlayers">Saved Players</label>
+    <select id="savedPlayers" onchange="loadPlayerSettings()">
+      <option value="">Select a player</option>
+    </select>
+
     <label for="message">Message</label>
     <input type="text" id="message" placeholder="Enter message">
 
@@ -142,11 +139,13 @@
     const playerInput = document.getElementById('playerName');
     const messageInput = document.getElementById('message');
     const playerColorSelect = document.getElementById('playerColor');
+    const savedPlayers = document.getElementById('savedPlayers');
     const preview = document.getElementById('preview');
     const ctButton = document.getElementById('ctButton');
     const tButton = document.getElementById('tButton');
 
     let teamCode = '\u000B'; // Default to CT
+    const playerSettings = {};
 
     function setTeam(team) {
       teamCode = team === 'CT' ? '\u000B' : '\u0009';
@@ -182,6 +181,45 @@
       navigator.clipboard.writeText(textToCopy).catch(err => {
         console.error('Failed to copy:', err);
       });
+      savePlayerSettings();
+    }
+
+    function savePlayerSettings() {
+      const playerName = playerInput.value;
+      if (!playerName) return;
+
+      playerSettings[playerName] = {
+        color: playerColorSelect.value,
+        team: teamCode
+      };
+
+      if (!Array.from(savedPlayers.options).some(option => option.value === playerName)) {
+        const newOption = document.createElement('option');
+        newOption.value = playerName;
+        newOption.textContent = playerName;
+        savedPlayers.appendChild(newOption);
+      }
+    }
+
+    function loadPlayerSettings() {
+      const selectedPlayer = savedPlayers.value;
+      if (!selectedPlayer || !playerSettings[selectedPlayer]) return;
+
+      const settings = playerSettings[selectedPlayer];
+      playerInput.value = selectedPlayer;
+      playerColorSelect.value = settings.color;
+      teamCode = settings.team;
+
+      // Update the active button based on the loaded team
+      if (teamCode === '\u000B') {
+        ctButton.classList.add('active');
+        tButton.classList.remove('active');
+      } else {
+        tButton.classList.add('active');
+        ctButton.classList.remove('active');
+      }
+
+      updatePreview();
     }
 
     playerInput.addEventListener('input', updatePreview);
