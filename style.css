@@ -1,6 +1,6 @@
 body {
     cursor: crosshair;
-    background-image: url('images/background.png');
+    background-image: url('images/background.jpg');
     background-size: cover; /* Ensures the image covers the entire viewport */
     background-position: center; /* Centers the image */
     background-repeat: no-repeat; /* Prevents the image from repeating */
