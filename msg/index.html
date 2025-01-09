@@ -38,7 +38,7 @@
       color: #555;
     }
 
-    input[type="text"] {
+    input[type="text"], select {
       width: 100%;
       padding: 10px;
       margin-bottom: 15px;
@@ -58,7 +58,7 @@
     }
 
     button {
-      width: 100%;
+      width: 48%;
       padding: 10px;
       background: #007bff;
       color: #fff;
@@ -66,16 +66,42 @@
       border-radius: 5px;
       font-size: 1rem;
       cursor: pointer;
+      margin-right: 4%;
+    }
+
+    button:last-child {
+      margin-right: 0;
     }
 
     button:hover {
       background: #0056b3;
+    }
+
+    .flex-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Chatwheel Editor</h1>
+
+    <div class="flex-buttons">
+      <button onclick="setTeam('CT')">CT</button>
+      <button onclick="setTeam('T')">T</button>
+    </div>
+
+    <label for="playerColor">Player Color</label>
+    <select id="playerColor" onchange="updatePreview()">
+      <option value="blue">Blue</option>
+      <option value="purple">Purple</option>
+      <option value="green">Green</option>
+      <option value="yellow">Yellow</option>
+      <option value="orange">Orange</option>
+    </select>
+
     <label for="playerName">Player Name</label>
     <input type="text" id="playerName" placeholder="Enter player name">
     
@@ -83,9 +109,8 @@
     <input type="text" id="message" placeholder="Enter message">
 
     <div class="preview" id="preview">
-      playerchatwheel CW.1 "Ping Site A 
-
-      [ALL] Player: message
+      playerchatwheel CW.1 "Ping Site A ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      [ALL] UC● TCPlayerName: Message
     </div>
     
     <button onclick="copyToClipboard()">Copy to Clipboard</button>
@@ -94,26 +119,43 @@
   <script>
     const playerInput = document.getElementById('playerName');
     const messageInput = document.getElementById('message');
+    const playerColorSelect = document.getElementById('playerColor');
     const preview = document.getElementById('preview');
 
-    function updatePreview() {
-      const player = playerInput.value || 'Player';
-      const message = messageInput.value || 'message';
+    let teamCode = '\u000B'; // Default to CT
 
-      preview.textContent = `playerchatwheel CW.1 "Ping Site A \n\n[ALL] \u0003${player}\u0001: ${message}`;
+    function setTeam(team) {
+      teamCode = team === 'CT' ? '\u000B' : '\u0009';
+      updatePreview();
     }
+
+    function updatePreview() {
+      const player = playerInput.value || 'PlayerName';
+      const message = messageInput.value || 'Message';
+      const colorCode = {
+        blue: '\u000B',
+        purple: '\u000E',
+        green: '\u0004',
+        yellow: '\u0009',
+        orange: '\u0010',
+      }[playerColorSelect.value];
+
+      preview.textContent = `playerchatwheel CW.1 "Ping Site A ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+[ALL] ${colorCode}● ${teamCode}${player}: ${message}`;
+    }
+
+    function copyToClipboard() {
+  const textToCopy = preview.textContent;
+  navigator.clipboard.writeText(textToCopy).catch(err => {
+    console.error('Failed to copy:', err);
+  });
+}
+
+
 
     playerInput.addEventListener('input', updatePreview);
     messageInput.addEventListener('input', updatePreview);
-
-    function copyToClipboard() {
-      const textToCopy = preview.textContent;
-      navigator.clipboard.writeText(textToCopy).then(() => {
-        alert('Copied to clipboard!');
-      }).catch(err => {
-        alert('Failed to copy: ' + err);
-      });
-    }
+    playerColorSelect.addEventListener('change', updatePreview);
   </script>
 </body>
 </html>
