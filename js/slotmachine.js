@@ -34,12 +34,27 @@ var icons = [
 var slots;
 var cols;
 
-let balance = 45;
+// Cookie functions for balance persistence
+function saveBalanceToCookie() {
+    document.cookie = `balance=${balance};path=/;max-age=31536000`; // Store for 1 year
+}
+
+function getBalanceFromCookie() {
+    const match = document.cookie.match(/balance=([^;]+)/);
+    return match ? parseInt(match[1]) : 45; // Default to 45 if no cookie found
+}
+
+// Initialize balance from cookie
+let balance = getBalanceFromCookie();
 updateBalance(0); // show right balance when page loads
+
+// Save balance when page is closed/refreshed
+window.addEventListener('beforeunload', saveBalanceToCookie);
 
 // passive income (1 credit every 20 seconds)
 setInterval(() => {
     updateBalance(1);
+    saveBalanceToCookie(); // Save after each update
 }, 20000);
 
 function updateLastWin(amount) {
@@ -197,6 +212,7 @@ function spin(elem) {
     }
     
     updateBalance(-currentBet);
+    saveBalanceToCookie(); // Save balance after bet
     
     // Play slot machine sound and show spin video
     const spinSound = new Audio('audio/slotmachine_mainsfx2.mp3');
@@ -383,6 +399,7 @@ function checkJackpot() {
 
     // Play appropriate sounds based on win types
     if (totalWin > 0) {
+        saveBalanceToCookie(); // Save balance after win
         if (hasJackpot) {
             const jackpotSound = new Audio('audio/jackpot5.mp3');
             jackpotSound.volume = 0.3;
