@@ -40,7 +40,7 @@ function createAd() {
     
     // Create close button
     const closeButton = document.createElement('button');
-    closeButton.className = 'ad-close-button';
+    closeButton.className = 'a_exit_button';
     closeButton.innerHTML = '×';
     closeButton.onclick = () => adContainer.remove();
 
@@ -84,7 +84,7 @@ style.textContent = `
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
     }
 
-    .ad-close-button {
+    .a_exit_button {
         position: absolute;
         top: 5px;
         right: 5px;
@@ -104,7 +104,7 @@ style.textContent = `
         justify-content: center;
     }
 
-    .ad-close-button:hover {
+    .a_exit_button:hover {
         background: #f0f0f0;
     }
 
