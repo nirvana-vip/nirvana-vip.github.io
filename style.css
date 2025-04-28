@@ -1,0 +1,31 @@
+body {
+    background-image: url('images/background.jpg');
+    background-size: cover; 
+    background-repeat: no-repeat; 
+}
+
+.overlay2 {
+    position: fixed;
+    top: 0px;
+    left: 4%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    width: 200px;
+    height: auto;
+    pointer-events: none;
+    filter: hue-rotate(0deg);
+}
+
+.overlay3 {
+    position: fixed;
+    top: 0px;
+    left: 95%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    width: 200px;
+    height: auto;
+    pointer-events: none;
+    filter: hue-rotate(180deg);
+    mix-blend-mode: screen;
+}
+

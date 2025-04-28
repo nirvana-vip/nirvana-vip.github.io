@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐛</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" href="images/favicon.png" type="image/png">
+
+    <style>
+
+        .dynamic-xhair {
+            position: fixed;
+            background: white;
+            width: 8px;
+            height: 2px;
+            pointer-events: none;
+            transition: transform 100ms ease;
+            z-index: 999999;
+            transform-origin: center;
+            mix-blend-mode: difference;
+            
+        }
+
+        .gunshot-decal {
+            position: absolute;
+            width: 140px; /* Increased size */
+            height: 140px; /* Increased size */
+            background-image: url('images/gunshot.png');
+            background-size: cover;
+            pointer-events: none; /* Prevent interaction with the decal */
+            opacity: 1;
+            animation: fadeOut 8s forwards; /* Fade out effect */
+            transform-origin: center; /* Set rotation point */
+            mix-blend-mode: color-dodge;
+            
+        }
+
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        /* Slot Machine Styles */
+        :root {
+            --icon-height: 190px;
+        }
+
+        .start-button {
+            padding: 10px 5px;
+            background: #212121;
+            border: 1px inset #ffffff;
+            font-size: 16px;
+            color: rgb(255, 255, 255);
+            text-shadow: none;
+            mix-blend-mode: normal;
+            font-family: '宋体'; /* 宋体 */
+            font-size: 16px;
+            text-align: center;
+            margin: 0px;
+            color: rgb(255, 255, 255);
+            font-weight: 100;
+            font-style: normal;
+            -webkit-font-smoothing: none;
+            -moz-osx-font-smoothing: unset;
+            letter-spacing: -0.9px;
+            font-smooth: never;
+            transform: scaleY(1); /* Vertical stretch by 1.5x */
+            transform-origin: center;
+            text-shadow: 
+            -0.5px -0.5px 0 #000,  
+            0.5px -0.5px 0 #000,
+            -0.5px 0.5px 0 #000,
+            0.5px 0.5px 0 #000;
+        }
+
+        .icon {
+            width: 120px;
+            height: var(--icon-height);
+            display: block;
+            position: relative;
+        }
+        
+        .slot-container {
+            background-color: #aaaaaa50;
+            padding: 5px;
+            width: 750px;
+            margin: 10px auto;
+            animation: pulse-shadow 0.2s ease-in-out infinite;
+            backdrop-filter: blur(2px);
+        }
+
+        .window {
+            position: relative;
+            overflow: hidden;
+            height: calc(3 * var(--icon-height));
+            background-color: #ff000000;
+        }
+
+        .window::before {
+            content: "";
+            clear: both;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background-image: linear-gradient(to bottom, rgba(227, 255, 248, 0.938), transparent);
+        }
+
+        .window::after {
+            content: "";
+            clear: both;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.163));
+        }
+
+        .window-border {
+            padding: 0px;
+            background: #ff000000;
+            mix-blend-mode: normal;
+            box-shadow: 0 65px 45px -5px #f2f2f2 inset;
+        }
+
+        /* old colors: background-image: linear-gradient(#240a1c, #5a1c31, #cb4eeb, #000000); */
+        .outer-col {
+            overflow-y: hidden;
+            width: 140px;
+            float: left;
+            background-color: #ffffff00;
+            background-image: linear-gradient(#ffffff00, #e8e8e800, #ffffff00, #ffffff00);
+            height: calc(var(--icon-height) * 3);
+        }
+
+        .outer-spacer {
+            width: 8px;
+            height: 100%;
+            float: left;
+            background-image: url('images/spacer.png');
+            background-size: cover;
+            background-repeat: repeat-y;
+            mix-blend-mode: difference;
+        }
+
+        .col {
+            padding: 0 10px;
+            will-change: transform;
+            transform: translateY(calc(-100% + var(--icon-height) * 3));
+            
+        }
+
+        /* blur effect for spinning */
+        @keyframes shadowPulse {
+        0% { box-shadow: 0 0 95px 30px rgba(255, 255, 255, 0.938); }
+        50% { box-shadow: 0 0 125px 40px rgb(115, 76, 255); }
+        100% { box-shadow: 0 0 95px 30px rgb(255, 102, 0); }
+        }
+
+        .slot-container.spinning .col .icon::after {
+        content: "";
+        clear: both;
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 1px;
+        height: 1px;
+        background-color: rgb(89, 29, 252);
+        box-shadow: 0 0 95px 30px rgba(0, 55, 255, 0.938);
+        z-index: 2;
+        border-radius: 500%;
+        animation: shadowPulse 5s ease-in-out infinite;
+        }   
+
+        .col img {
+            width: 100%;
+            height: auto;
+            margin: 10px 0;
+            position: relative;
+            z-index: 3;
+        }
+
+        /* main spinning anim */
+        .slot-container.spinning .col {
+            animation-name: scroll;
+            animation-iteration-count: 1;
+            animation-timing-function: cubic-bezier(.45, .05, .55, .95); /* Smoother easing */
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateY(calc(-100% + var(--icon-height) * 3));
+            }
+            5% {
+                transform: translateY(calc(-100% + var(--icon-height) * 3 - 20px));
+                filter: blur(0);
+            }
+            15% {
+                transform: translateY(calc(-100% + var(--icon-height) * 3 - 20px));
+                filter: blur(0);
+            }
+            20% {
+                filter: blur(2px);
+            }
+            95% {
+                transform: translateY(0); /* Tiny bounce up */
+                filter: blur(0);
+            }
+            97% {
+                transform: translateY(-3px); /* Tiny bounce up */
+                filter: blur(0);
+            }
+            100% {
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        img.overlay {
+            position: absolute;
+            bottom: 5;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            width: 1920px;
+            height: auto;
+            pointer-events: none;
+            animation: warpEffect 5s ease-in-out infinite;
+            transform-origin: bottom center;
+            perspective: 500px;
+        }
+
+        @keyframes warpEffect {
+            0% { transform: translateX(-50%) rotateX(1deg) skewX(-2deg); }
+            50% { transform: translateX(-50%) rotateX(-1deg) skewX(0.5deg); }
+            100% { transform: translateX(-50%) rotateX(1deg) skewX(-2deg); }
+        }
+
+        @keyframes bgShake {
+            0% { background-position: 0 0; }
+            50% { background-position: 1px 0px; }
+            100% { background-position: 0 0; }
+        }
+
+        .bg-shake {
+            animation: bgShake 0.15s;
+        }
+
+        /* cursor, prevent selection/dragging imgs/highlighting etc */
+        body {
+            cursor: none;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            overflow-x: hidden;
+        }
+
+        @keyframes screenFlash {
+            0% { opacity: 0.1; }
+            100% { opacity: 0; }
+        }
+
+        .flash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgb(255, 243, 222);
+            mix-blend-mode: soft-light;
+            pointer-events: none;
+            z-index: 99999;
+            opacity: 0;
+            animation: screenFlash 2s linear;
+        }
+
+        .info-window {
+            background: #1d1d1d;
+            border: 1px solid #000000;
+            min-width: 345px;
+            min-height: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            mix-blend-mode: normal;
+            padding: 1px 2px;
+            margin: 1px 0;
+        }
+
+        .info-label {
+            font-family: '宋体'; /* 宋体 */
+            font-size: 16px;
+            color: rgb(77, 77, 77); /* Changed color to black */
+            text-shadow: rgb(255, 255, 255) 0.5px 0.5px 0;
+        }
+
+        .info-value {
+            color: rgb(54, 54, 54);
+            text-shadow: rgb(255, 255, 255) 0.5px 0.5px 0;
+            font-size: 16px;
+            font-family: '宋体';
+        }
+
+        .bet-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0px;
+        }
+
+        .bet-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 10px;
+            background: #4d4d4d;
+            border: 1px solid #ffffff;
+            color: rgb(255, 255, 255);
+            user-select: none;
+            cursor: none;
+            font-size: 8px;
+            line-height: 8px;
+        }
+
+        .bet-button:hover {
+            background: rgb(255, 255, 255);
+        }
+
+        @keyframes jackpot-pulse-shadow {
+            0% {
+                box-shadow: 0 110px 150px rgb(255, 255, 255);
+            }
+            50% {
+                box-shadow: 0 110px 250px rgb(255, 245, 107);
+            }
+            100% {
+                box-shadow: 0 110px 150px rgb(255, 255, 255);
+            }
+        }
+
+        .jackpot-pulse {
+            animation: jackpot-pulse-shadow 0.3s ease-in-out infinite !important;
+        }
+
+
+    .ms-gothic-font {
+        font-family: '宋体'; /* 宋体 */
+        font-size: 16px;
+        text-align: center;
+        margin: 0px;
+        color: rgb(255, 255, 255);
+        mix-blend-mode: difference;
+        font-weight: 100;
+        font-style: normal;
+        -webkit-font-smoothing: none;
+        -moz-osx-font-smoothing: unset;
+        letter-spacing: -0.9px;
+        font-smooth: never;
+        transform: scaleY(1); /* Vertical stretch by 1.5x */
+        transform-origin: center;
+        text-shadow: 
+       -0.5px -0.5px 0 #000,  
+       0.5px -0.5px 0 #000,
+        -0.5px 0.5px 0 #000,
+        0.5px 0.5px 0 #000;
+    }
+
+    .ms-gothic-font-light {
+        font-family: '宋体'; /* 宋体 */
+        font-size: 16px;
+        text-align: center;
+        margin: 0px;
+        color: rgb(255, 255, 255);
+        font-weight: 100;
+        font-style: normal;
+        -webkit-font-smoothing: none;
+        -moz-osx-font-smoothing: unset;
+        letter-spacing: -0.9px;
+        font-smooth: never;
+        transform: scaleY(1); /* Vertical stretch by 1.5x */
+        transform-origin: center;
+        /* 
+        text-shadow: 
+       -0.5px -0.5px 0 #000,  
+       0.5px -0.5px 0 #000,
+        -0.5px 0.5px 0 #000,
+        0.5px 0.5px 0 #000;
+        */
+
+    }
+
+    .rotating-text-container {
+        position: relative;
+        top: 20%;
+        width: 290px;
+        height: 0px;
+        margin: 0px auto;
+        
+        /* Container for reference only, actual positioning is calculated */
+    }
+    
+    /* Text elements positioned using absolute coordinates */
+    .text-element {
+        position: absolute;
+        left: -250%;
+        top: 10%;
+        /* Center point of text is positioned at exact radius from center */
+        transform-origin: center;
+        /* Each element will be positioned and rotated individually via JS */
+    }
+    
+    /* Shared styling for both text elements */
+    .good-luck, .bad-luck {
+        /* Text always remains upright regardless of position */
+        white-space: nowrap;
+    }
+    /* Scrolling marquee text */
+    .marquee {
+        --gap: 1rem;
+        position: fixed;
+        bottom: -20px;
+        left: 0;
+        width: 100%;
+        padding: 10px 0;
+        z-index: 999;
+        display: flex;
+        overflow: hidden;
+        user-select: none;
+        gap: var(--gap);
+    }
+
+    .marquee__content {
+        flex-shrink: 0;
+        display: flex;
+        justify-content: space-around;
+        min-width: 100%;
+        gap: var(--gap);
+        animation: scroll2 35s linear infinite;
+        list-style: none;
+    }
+
+    .marquee__item {
+        flex: 0 0 auto;
+        color: white;
+
+        font-size: 14px;
+        white-space: nowrap;
+    }
+
+    @keyframes scroll2 {
+        from {
+            transform: translateX(0);
+        }
+        to {
+            transform: translateX(calc(-100% - var(--gap)));
+        }
+    }
+
+    .caligula-video {
+        position: absolute;
+        top: 110%;
+        left: 8%;
+        width: 40%;
+        height: 40%;
+        z-index: 1;
+        opacity: 1;
+        mix-blend-mode: normal;
+        
+    }
+
+    .freesia-coin {
+        position: absolute;
+        top: 15%;
+        left: 68%;
+        width: 30%;
+        height: 30%;
+        z-index: 1;
+        opacity: 1;
+        mix-blend-mode: color-burn;
+        
+    }
+
+    .vixiu-container {
+        position: absolute;
+        top: 20%;
+        left: 1%;
+        width: 25%;
+        border: 1px solid rgb(255, 255, 255);
+        padding: 4px;
+        z-index: 0;
+    }
+
+    .vixiu-container::before {
+    content: 'paid advertisement\A buy cheap expensive luxury watches on vixiu24-timepieces.cn/freesia';
+    white-space: pre;
+    display: block;
+    color: white;
+    font-family: '宋体';
+    font-size: 14px;
+    padding: 4px;
+    margin-bottom: 4px;
+}
+
+    .vixiu-video {
+        width: 100%;
+        height: auto;
+        opacity: 1;
+        mix-blend-mode: normal;
+    }
+
+
+    /* Stock Chart Styles */
+    .stock-chart-container {
+        position: absolute;
+        top: 40px;
+        right: 20px;
+        width: 500px;
+        background-color: rgba(0, 0, 0, 0.7);
+        border: 1px solid #ffffff;
+        padding: 10px;
+        z-index: 10;
+        backdrop-filter: blur(2px);
+        box-sizing: border-box;
+    }
+
+    .chart-header {
+         
+        margin-bottom: 5px;
+        text-align: center;
+    }
+
+    #stockChart {
+        position: absolute;
+        top: 40px;
+        right: 0px;
+        width: 100%;
+        height: 100px;
+        max-width: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: crisp-edges;
+        box-sizing: border-box;
+    }
+    
+    /* Trading Panel Styles */
+    .trading-panel {
+        position: absolute;
+        top: 400px;
+        right: 20px;
+        width: 465px;
+        height: 260px;
+        background-color: rgba(0, 0, 0, 0.7);
+        border: 1px solid #ffffff;
+        padding: 15px;
+        z-index: 10;
+        backdrop-filter: blur(2px);
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .trading-header {
+        margin-bottom: 15px;
+        text-align: center;
+    }
+    
+    .trading-controls {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .trading-info {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .info-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: white;
+    }
+    
+    .leverage-controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .leverage-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 0px;
+    }
+    
+    .trading-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-top: auto;
+    }
+    
+    .amount-leverage-row {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+    
+    .trade-amount {
+        width: 0px;
+        color: white;
+    }
+    
+    .trade-amount-input {
+        width: 100%;
+        background: #1d1d1d;
+        border: 1px solid #ffffff;
+        color: #ffffff;
+        padding: 8px;
+        font-family: '宋体';
+        font-size: 16px;
+    }
+    
+    .trade-buttons {
+        display: flex;
+        gap: 10px;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0 5px;
+        justify-content: center;
+    }
+    
+    .trade-button {
+        flex: 1;
+        padding: 12px;
+        background: #212121;
+        border: 1px inset #ffffff;
+        font-family: '宋体';
+        font-size: 16px;
+        color: white;
+        cursor: none;
+        text-shadow: -0.5px -0.5px 0 #000, 0.5px -0.5px 0 #000, -0.5px 0.5px 0 #000, 0.5px 0.5px 0 #000;
+        margin: 0;
+        box-sizing: border-box;
+        max-width: calc(50% - 5px);
+    }
+    
+    .buy-button {
+        background: #1d3d1d;
+    }
+    
+    .sell-button {
+        background: #3d1d1d;
+    }
+    
+    .trade-button:disabled {
+        opacity: 0.5;
+        cursor: none;
+    }
+    </style>
+
+
+</head>
+
+<body>
+
+    <div>
+        <h1 class="ms-gothic-font">FREESIA  寻找</h1>
+    </div>
+    
+    <!-- Stock Chart Container -->
+    <div class="stock-chart-container">
+        <div class="chart-header">
+            <h3 class="ms-gothic-font-light">$FSIA</h3>
+        </div>
+        <canvas id="stockChart" width="800" height="400"></canvas>
+    </div>
+    
+    <div class="rotating-text-container">
+        <div class="text-element good-luck ms-gothic-font-light">祝你好运</div>
+        <div class="text-element bad-luck ms-gothic-font">MEDIUM LUCK</div>
+    </div>
+
+    <div class="rotating-text-container">
+        <div class="text-element good-luck ms-gothic-font-light">MENtAL</div>
+        <div class="text-element bad-luck ms-gothic-font">freesia</div>
+
+    </div>
+
+    <video class="caligula-video" autoplay loop muted playsinline>
+        <source src="images/caligula.webm" type="video/webm">
+        Your browser does not support the video tag.
+    </video>
+    
+    <video class="freesia-coin" autoplay loop muted playsinline>
+        <source src="images/freesia_coin.webm" type="video/webm">
+        Your browser does not support the video tag.
+    </video>
+
+    <div class="vixiu-container">
+        <video class="vixiu-video" autoplay loop muted playsinline>
+            <source src="images/ad_vixiu.webm" type="video/webm">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    
+    <div class="slot-container">
+        <div class="window-border">
+            <div class="window">
+                <!-- Fixed width spacers between columns -->
+                <div class="outer-spacer"></div>
+                <!-- Column 1 -->
+                <div class="outer-col" style="left: 0%">
+                    <div class="col"></div>
+                </div>
+                <div class="outer-spacer"></div>
+                <!-- Column 2 -->
+                <div class="outer-col" style="left: 20%">
+                    <div class="col"></div>
+                </div>
+                <div class="outer-spacer"></div>
+                <!-- Column 3 -->
+                <div class="outer-col" style="left: 40%">
+                    <div class="col"></div>
+                </div>
+                <div class="outer-spacer"></div>
+                <!-- Column 4 -->
+                <div class="outer-col" style="left: 60%">
+                    <div class="col"></div>
+                </div>
+                <div class="outer-spacer"></div>
+                <!-- Column 5 -->
+                <div class="outer-col" style="left: 80%">
+                    <div class="col"></div>
+                </div>
+                <div class="outer-spacer"></div>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px;">
+                <div class="info-window" style="display: flex; gap: 15px; align-items: center; padding: 4px 8px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <div class="info-label">BALANCE</div>
+                        <span id="balance" class="info-value"></span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <div class="info-label">LAST WIN</div>
+                        <span id="last-win" class="info-value">0〠</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <div class="info-label">BET</div>
+                        <span id="current-bet" class="info-value">5〠</span>
+                        <div class="bet-buttons" style="margin-left: 4px;">
+                            <div class="bet-button bet-up" onmousedown="increaseBet()">▲</div>
+                            <div class="bet-button bet-down" onmousedown="decreaseBet()">▼</div>
+                        </div>
+                    </div>
+                </div>
+                <div onmousedown="spin(this)" class="start-button" style="text-align: center; margin: 0 10px;">LET'S GO! 旋转！！</div>
+            </div>
+        </div>
+
+    </div>
+
+    <img src="images/minotaur.jpg" alt="minotaur" style="max-width: 100%; height: auto; margin-top: 30px;">
+
+    <img src="images/wheat1.png" alt="Overlay Image" class="overlay" >
+
+    <img src="images/skull.png" alt="Overlay Image" class="overlay2">
+    
+    <img src="images/skull.png" alt="Overlay Image" class="overlay3">
+    
+    <!-- Scrolling marquee text -->
+    <div class="marquee">
+        <ul class="marquee__content">
+            <li class="marquee__item ms-gothic-font-light">100% UNSANCTIONED!</li>
+            <li class="marquee__item ms-gothic-font-light">POWERED BY THE GREAT FIREWALL</li>
+            <li class="marquee__item ms-gothic-font-light">DOSTOEVSKY COULDN'T STOP EITHER</li>
+            <li class="marquee__item ms-gothic-font-light">ESCAPE FATE THROUGH CHANCE</li>
+            <li class="marquee__item ms-gothic-font-light">GUARANTEED ASCENSION</li>
+            <li class="marquee__item ms-gothic-font-light">FUN FOREVER</li>
+            <li class="marquee__item ms-gothic-font-light">INFINITE CHANCES</li>
+            <li class="marquee__item ms-gothic-font-light">STILL LEGAL IN MOST COUNTRIES</li>
+            <li class="marquee__item ms-gothic-font-light">REAP THE FRUIT</li>
+            <li class="marquee__item ms-gothic-font-light">A CONTINUOUS CHANCE WITH ETERNAL RESULTS</li>
+            <li class="marquee__item ms-gothic-font-light">走向荣耀之路</li>
+            <li class="marquee__item ms-gothic-font-light">"Excitingly Numbing"</li>
+            <li class="marquee__item ms-gothic-font-light">UNREGULATED FUN</li>
+            <li class="marquee__item ms-gothic-font-light">the stars align</li>
+            <li class="marquee__item ms-gothic-font-light">WISDOM WISDOM</li>
+            <li class="marquee__item ms-gothic-font-light">CONTROL CONTROL</li>
+            
+        </ul>
+        <ul class="marquee__content" aria-hidden="true">
+            <li class="marquee__item ms-gothic-font-light">100% UNSANCTIONED!</li>
+            <li class="marquee__item ms-gothic-font-light">POWERED BY THE GREAT FIREWALL</li>
+            <li class="marquee__item ms-gothic-font-light">DOSTOEVSKY COULDN'T STOP EITHER</li>
+            <li class="marquee__item ms-gothic-font-light">ESCAPE FATE THROUGH CHANCE</li>
+            <li class="marquee__item ms-gothic-font-light">GUARANTEED ASCENSION</li>
+            <li class="marquee__item ms-gothic-font-light">FUN FOREVER</li>
+            <li class="marquee__item ms-gothic-font-light">INFINITE CHANCES</li>
+            <li class="marquee__item ms-gothic-font-light">STILL LEGAL IN MOST COUNTRIES</li>
+            <li class="marquee__item ms-gothic-font-light">REAP THE FRUIT</li>
+            <li class="marquee__item ms-gothic-font-light">A CONTINUOUS CHANCE WITH ETERNAL RESULTS</li>
+            <li class="marquee__item ms-gothic-font-light">走向荣耀之路</li>
+            <li class="marquee__item ms-gothic-font-light">"Excitingly Numbing"</li>
+            <li class="marquee__item ms-gothic-font-light">UNREGULATED FUN</li>
+            <li class="marquee__item ms-gothic-font-light">the stars align</li>
+            <li class="marquee__item ms-gothic-font-light">WISDOM WISDOM</li>
+            <li class="marquee__item ms-gothic-font-light">CONTROL CONTROL</li>
+            
+        </ul>
+    </div>
+
+    <style>
+        .wrestle-image {
+            z-index: 13;
+            position: absolute;
+            right: 40px;
+            top: 67%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            width: 170px;
+            height: auto;
+            mix-blend-mode: normal;
+        }
+    </style>
+    <img src="images/wrestle.png" alt="wrestle" class="wrestle-image">
+
+    <audio id="noise-audio" autoplay loop>
+        <source src="audio/noise1.mp3" type="audio/mp3"> 
+        Your browser does not support the audio element.
+    </audio>
+
+
+    
+    <script src="js/slotmachine.js" defer></script>
+    <script src="js/circular-text.js" defer></script>
+    <script src="js/ad-system.js" defer></script>
+    <script src="js/stockchart.js" defer></script>
+    <script src="js/stocktrading.js" defer></script>
+
+    <script>
+        document.getElementById('noise-audio').volume = 0.25;
+        const noiseAudio = document.getElementById('noise-audio');
+        let autoFireInterval;
+        let isMouseDown = false;
+        let shakeInterval;
+        let lastDecalTime = 0;
+
+        // Prevent image dragging again?? fk it
+        document.querySelectorAll('img').forEach(img => {
+            img.draggable = false;
+        });
+
+        function createGunshotDecal(x, y) {
+            // flash
+            const flash = document.createElement('div');
+            flash.className = 'flash';
+            document.body.appendChild(flash);
+            flash.addEventListener('animationend', () => flash.remove());
+            
+            // decal
+            const decal = document.createElement('div');
+            decal.className = 'gunshot-decal';
+            decal.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 360}deg)`;
+            decal.style.left = `${x}px`;
+            decal.style.top = `${y + window.scrollY}px`;
+            document.body.appendChild(decal);
+            
+            const gunshotSound = new Audio('audio/fullauto2.mp3');
+            gunshotSound.volume = 0.3;
+            gunshotSound.play();
+            
+            gunshotSound.onended = () => gunshotSound.remove();
+            decal.addEventListener('animationend', () => decal.remove());
+        }
+
+        // idk some glitch prevention
+        function stopFiring() {
+            clearInterval(autoFireInterval);
+            isMouseDown = false;
+        }
+
+        document.addEventListener('mousedown', function(e) {
+            if (e.button === 0) {
+                e.preventDefault(); // Prevent default dragging behavior
+                isMouseDown = true;
+                createGunshotDecal(e.clientX, e.clientY);
+                lastDecalTime = Date.now();
+            }
+        });
+
+        document.addEventListener('mousemove', function(e) {
+            if (isMouseDown) {
+                e.preventDefault(); // Prevent highlighting while dragging
+                const now = Date.now();
+                if (now - lastDecalTime >= 150) {
+                    createGunshotDecal(e.clientX, e.clientY);
+                    lastDecalTime = now;
+                }
+            }
+        });
+
+        document.addEventListener('mouseup', function() {
+            isMouseDown = false;
+        });
+
+        document.addEventListener('click', function() {
+            if (noiseAudio.paused) {
+                noiseAudio.play();
+            }
+        });
+
+        // Background shake
+        const backgroundShake = {
+            start: function() {
+                this.shake();
+                clearInterval(shakeInterval);
+                shakeInterval = setInterval(() => this.shake(), 150);
+            },
+            
+            stop: function() {
+                clearInterval(shakeInterval);
+                document.body.classList.remove('bg-shake');
+            },
+            
+            shake: function() {
+                document.body.classList.remove('bg-shake');
+                void document.body.offsetWidth; // Reset animation
+                document.body.classList.add('bg-shake');
+            }
+        };
+
+        // Event listeners
+        document.addEventListener('mousedown', () => backgroundShake.start());
+        document.addEventListener('mouseup', () => backgroundShake.stop());
+
+        // Load the stock chart script
+        const stockChartScript = document.createElement('script');
+        stockChartScript.src = 'js/stockchart.js';
+        document.body.appendChild(stockChartScript);
+
+        // DYNAMIC CROSSHAIR!!!!!!!!!!!
+        const cursor = {
+            top: document.createElement('div'),
+            right: document.createElement('div'),
+            bottom: document.createElement('div'),
+            left: document.createElement('div')
+        };
+
+        // Setup each piece
+        Object.values(cursor).forEach(piece => {
+            piece.className = 'dynamic-xhair';
+            document.body.appendChild(piece);
+        });
+
+        let isMoving = false;
+        let moveTimeout;
+
+        // Track mouse movement
+        document.addEventListener('mousemove', (e) => {
+            Object.values(cursor).forEach(piece => {
+            piece.style.left = `${e.clientX}px`;
+            piece.style.top = `${e.clientY}px`;
+            });
+            // expansion
+            isMoving = true;
+            clearTimeout(moveTimeout);
+            expandCursor();
+            moveTimeout = setTimeout(() => {
+            isMoving = false;
+            contractCursor();
+            }, 150);
+        });
+
+
+        function expandCursor() {
+            cursor.top.style.transform = 'translate(-50%, -15px) rotate(90deg)';
+            cursor.right.style.transform = 'translate(10px, -50%) rotate(0deg)';
+            cursor.bottom.style.transform = 'translate(-50%, 13px) rotate(90deg)';
+            cursor.left.style.transform = 'translate(-18px, -50%) rotate(0deg)';
+        }
+
+        function contractCursor() {
+            cursor.top.style.transform = 'translate(-50%, -6px) rotate(90deg)';
+            cursor.right.style.transform = 'translate(1px, -50%) rotate(0deg)';
+            cursor.bottom.style.transform = 'translate(-50%, 4px) rotate(90deg)';
+            cursor.left.style.transform = 'translate(-9px, -50%) rotate(0deg)';
+        }
+
+       
+        
+    </script>
+</body>
+</html>

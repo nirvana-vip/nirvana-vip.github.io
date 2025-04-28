@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ecilhlja🍃</title>
+  <style>
+        @font-face {
+      font-family: 'Stratum2Bold';
+      src: url('../images/Stratum2Bold.woff2') format('woff2'),
+    }
+
+    * {
+        cursor: crosshair !important;
+    }  
+
+
+    body {
+      font-family: "helvetica";
+      width: 100%;
+      font-weight: 400 !important;
+      background-image: url('../images/background.jpg');
+      background-color: #ffffff;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start; /* Keep content at the top */
+      height: 100vh;
+      padding: 20px; /* Add some space from the top */
+  }
+
+    .container {
+      background: #ffffffa4;
+      padding: 0px;
+      border-radius: 5px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+      min-height: 500px; /* Set minimum height for consistent positioning */
+      display: flex;
+      flex-direction: column; /* Ensure tabs and content align vertically */
+    }
+
+    .container h1 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #333;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #555;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    input[type="text"], select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #c0c0c0;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    .preview {
+      background: #f9f9f9;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-family: monospace;
+      color: #333;
+      display: none;
+    }
+
+    .flex-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+
+    button {
+      width: 48%;
+      padding: 10px;
+      background: #ff3c3c;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-right: 4%;
+    }
+
+    button:last-child {
+      margin-right: 0;
+    }
+
+    button:hover {
+      background: #ff7070;
+    }
+
+    button.active {
+      background: #e01919;
+      font-weight: bold;
+    }
+
+    
+    .tabs {
+      display: flex;
+      justify-content: flex-start;
+      background-color: #ff3c3c;
+      padding: 10px;
+      border-bottom: 2px solid #ccc;
+    }
+
+    .tab-button {
+      background: none;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      color: #fff;
+    }
+
+    .tab-button:hover {
+      background-color: #ff7070;
+    }
+
+    .tab-button.active {
+      background: #e01919;
+    }
+
+    
+
+    .tab-content {
+      flex: 1; /* Allow content to grow and shrink inside the container */
+      display: none;
+      padding: 10px;
+      border: 1px solid #ff3c3c;
+      border-top: none;
+    }
+
+    .tab-content.active {
+      display: block; /* Show active tab content */
+    }
+
+    .chat-preview {
+      background: rgba(0, 0, 0, 0.8);  /* Dark, semi-transparent background like game chat */
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      font-family: 'Stratum2Bold', sans-serif;
+    }
+
+    .chat-message {
+      color: white;  /* Default text color */
+    }
+
+    /* Color classes for different parts */
+    .team-t { color: #ede47b; }  /* Yellow for T */
+    .team-ct { color: #5f99d9; }  /* Blue for CT */
+    .chat-green { color: #41ff41; }  /* Green color */
+    .chat-spec { color: #c6cbd0; }  /* Grey for SPEC */
+
+    /* Player dot colors */
+    .dot-blue { color: #5f99d9; }    /* Same as CT blue */
+    .dot-purple { color: #d32de6; }   /* Purple */
+    .dot-green { color: #41ff41; }    /* Same as chat green */
+    .dot-yellow { color: #ede47b; }   /* Same as T yellow */
+    .dot-orange { color: #e4af3a; }   /* Orange */
+
+    .custom-text {
+        width: 100%;
+        background: transparent;
+        border: none;
+        color: white;
+        font-family: 'Stratum2Bold', sans-serif;
+        min-height: 60px;
+        outline: none;
+        padding: 0;
+        white-space: pre-wrap;
+    }
+
+    .custom-text[placeholder]:empty:before {
+        content: attr(placeholder);
+        color: #555;
+    }
+
+    /* Make sure spans inside custom-text inherit font but keep their colors */
+    .custom-text span {
+        font-family: 'Stratum2Bold', sans-serif;
+        white-space: pre-wrap;
+        display: inline;
+    }
+
+    .color-buttons {
+        margin-bottom: 10px;
+    }
+
+    .color-btn {
+        width: 20px !important;
+        height: 20px !important;
+        padding: 2px !important;
+        margin-right: 5px !important;
+        background: #ff000000 !important;
+    }
+
+    .color-square {
+        width: 100%;
+        height: 100%;
+        border-radius: 5px;
+    }
+
+    .color-square.white { background-color: #ffffff; }
+    .color-square.darkred { background-color: #ff0000; }
+    .color-square.red { background-color: #ff4141; }
+    .color-square.lightred { background-color: #eb4c4c; }
+    .color-square.darkblue { background-color: #4c6aff; }
+    .color-square.blue { background-color: #5f99d9; }
+    .color-square.darkgreen { background-color: #41ff41; }
+    .color-square.green { background-color: #a3ff48; }
+    .color-square.lightgreen { background-color: #c0ff91; }
+    .color-square.grey { background-color: #c6cbd0; }
+    .color-square.yellow { background-color: #ede47b; }
+    .color-square.gold { background-color: #e4af3a; }
+    .color-square.orchid { background-color: #d32de6; }
+
+  </style>
+</head>
+<body>
+
+
+  <div class="container">
+
+    <div class="tabs">
+      <button class="tab-button" data-tab="fakeChat">chat</button>
+      <button class="tab-button" data-tab="unbox">unbox</button>
+      <button class="tab-button" data-tab="misc">misc</button>
+    </div>
+    
+
+    <div id="fakeChat" class="tab-content">
+
+      <h1>Ecilhlja v1.2</h1>
+
+      <img src="../images/skull.png" alt="Overlay Image" class="overlay2" style="width: 150px; height: auto; display: block; margin: 0 auto;">
+
+      <div class="flex-buttons">
+        <button id="ctButton" onclick="setTeam('ct')" class="active">CT</button>
+        <button id="tButton" onclick="setTeam('t')">T</button>
+      </div>
+
+      <div class="flex-buttons">
+        <button id="allButton" onclick="setChannel('all')" class="active">[all]</button>
+        <button id="teamButton" onclick="setChannel('team')">[team]</button>
+        <button id="specButton" onclick="setChannel('spec')">[spec]</button>
+      </div>
+
+      <label for="playerColor">Player color</label>
+      <select id="playerColor" onchange="updatePreview()">
+        <option value="blue">Blue</option>
+        <option value="purple">Purple</option>
+        <option value="green">Green</option>
+        <option value="yellow">Yellow</option>
+        <option value="orange">Orange</option>
+      </select>
+
+      <label for="playerName">Player name</label>
+      <input type="text" id="playerName" placeholder="Enter player name">
+
+      <label for="savedPlayers">Saved players</label>
+      <select id="savedPlayers" onchange="loadPlayerSettings()">
+        <option value="">Select a player</option>
+      </select>
+
+      <label for="message">Message</label>
+      <input type="text" id="message" placeholder="Enter message">
+
+      <!-- Hidden preview for clipboard -->
+      <div class="preview" id="preview" style="display: none;"></div>
+      
+      <!-- Visual chat preview -->
+      <div class="chat-preview" id="chatPreview">
+        <div class="chat-message"></div>
+      </div>
+    
+      <button onclick="copyToClipboard()">copy</button>
+    </div>
+
+
+    <div id="unbox" class="tab-content">
+      <label for="unboxPlayerName">Your name</label>
+      <input type="text" id="unboxPlayerName" placeholder="Enter your name">
+
+      <div class="input-group">
+        <label for="unboxPlayerName">Item name</label>
+        <input type="text" id="itemName" placeholder="Karambit, AWP, AK-47, etc.">
+        <label for="unboxPlayerName">Skin name</label>
+        <input type="text" id="paintKit" placeholder="Fade, Lore, Safari Mesh, etc.">
+      </div>
+      
+      <div class="flex-buttons">
+        <label class="checkbox-container">
+          <input type="checkbox" id="isKnifeGloves" checked>
+          <span class="checkmark"></span>
+          Knife/Gloves
+        </label>
+        <label class="checkbox-container">
+          <input type="checkbox" id="isStatTrak" checked>
+          <span class="checkmark"></span>
+          StatTrak™
+        </label>
+      </div>
+
+      <select id="itemRarity" class="full-width">
+        <option value="0x0F">Covert (Red)</option>
+        <option value="0x0E">Classified (Pink)</option>
+        <option value="0x0C">Mil-Spec (Blue)</option>
+      </select>
+
+      <button onclick="copyUnboxMessage()" class="full-width">copy</button>
+    </div>
+    
+
+    <div id="misc" class="tab-content">
+      <label for="miscPlayerName">Player name</label>
+      <input type="text" id="miscPlayerName" placeholder="Enter player name">
+
+      <label for="miscSavedPlayers">Saved players</label>
+      <select id="miscSavedPlayers" onchange="loadMiscPlayer()">
+        <option value="">Select a player</option>
+      </select>
+
+      <div class="flex-buttons">
+        <button onclick="copyKickMessage()">kick</button>
+        <button onclick="copyVacMessage()">vac</button>
+      </div>
+
+      <div class="flex-buttons">
+        <button onclick="copyJoinCT()">join ct</button>
+        <button onclick="copyJoinT()">join t</button>
+        <button onclick="copyJoinSpec()">join spec</button>
+      </div>
+
+      <hr style="border: 0; height: 2px; background-color: #ff0000; margin: 20px 0;">
+
+      <div class="flex-buttons color-buttons">
+        <button onclick="insertColor('\u0001')" class="color-btn"><div class="color-square white"></div></button>
+        <button onclick="insertColor('\u0002')" class="color-btn"><div class="color-square darkred"></div></button>
+        <button onclick="insertColor('\u0007')" class="color-btn"><div class="color-square red"></div></button>
+        <button onclick="insertColor('\u000F')" class="color-btn"><div class="color-square lightred"></div></button>
+        <button onclick="insertColor('\u000C')" class="color-btn"><div class="color-square darkblue"></div></button>
+        <button onclick="insertColor('\u000B')" class="color-btn"><div class="color-square blue"></div></button>
+        <button onclick="insertColor('\u0004')" class="color-btn"><div class="color-square darkgreen"></div></button>
+        <button onclick="insertColor('\u0006')" class="color-btn"><div class="color-square green"></div></button>
+        <button onclick="insertColor('\u0005')" class="color-btn"><div class="color-square lightgreen"></div></button>
+        <button onclick="insertColor('\u0008')" class="color-btn"><div class="color-square grey"></div></button>
+        <button onclick="insertColor('\u0009')" class="color-btn"><div class="color-square yellow"></div></button>
+        <button onclick="insertColor('\u0010')" class="color-btn"><div class="color-square gold"></div></button>
+        <button onclick="insertColor('\u000E')" class="color-btn"><div class="color-square orchid"></div></button>
+      </div>
+
+      <div class="chat-preview">
+        <div id="customText" class="custom-text" contenteditable="true" placeholder="Enter your message here"></div>
+      </div>
+
+      <div class="flex-buttons">
+        <button onclick="copyCustomMessage()">copy</button>
+      </div>
+
+    </div>
+  </div>
+  
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const tabs = document.querySelectorAll('.tab-button');
+      const contents = document.querySelectorAll('.tab-content');
+
+      function openTab(tabId) {
+        contents.forEach(content => content.classList.remove('active'));
+        tabs.forEach(tab => tab.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        document.querySelector(`.tab-button[data-tab="${tabId}"]`).classList.add('active');
+      }
+
+      // Set up click events
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => openTab(tab.getAttribute('data-tab')));
+      });
+
+      // Open the first tab by default
+      tabs[0].click();
+    });
+
+
+    const playerInput = document.getElementById('playerName');
+    const messageInput = document.getElementById('message');
+    const playerColorSelect = document.getElementById('playerColor');
+    const savedPlayers = document.getElementById('savedPlayers');
+    const preview = document.getElementById('preview');
+    const ctButton = document.getElementById('ctButton');
+    const tButton = document.getElementById('tButton');
+
+    let currentChannel = 'all';
+    let teamCode = '\u000B'; // Default to CT
+    const playerSettings = {};
+
+    function setTeam(team) {
+        if (team === 't') {
+            teamCode = '\u0009';
+        } else {
+            teamCode = '\u000B';
+        }
+        
+        // Update team button states
+        const tButton = document.getElementById('tButton');
+        const ctButton = document.getElementById('ctButton');
+        tButton.classList.toggle('active', team === 't');
+        ctButton.classList.toggle('active', team === 'ct');
+        
+        updatePreview();
+    }
+
+    function setChannel(channel) {
+        currentChannel = channel;
+        
+        // Update channel button states
+        const allButton = document.getElementById('allButton');
+        const teamButton = document.getElementById('teamButton');
+        const specButton = document.getElementById('specButton');
+        
+        [allButton, teamButton, specButton].forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`${channel}Button`).classList.add('active');
+        
+        updatePreview();
+    }
+
+    function updatePreview() {
+        const player = playerInput.value || 'PlayerName';
+        const message = messageInput.value || 'Message';
+        const colorCode = {
+            blue: '\u000B',
+            purple: '\u000E',
+            green: '\u0004',
+            yellow: '\u0009',
+            orange: '\u0010',
+        }[playerColorSelect.value];
+        
+        let channelText = 'C';
+        let prefix = '';
+        let suffix = '';
+        let playerTeamCode = teamCode;
+        let shouldShowDot = true;
+
+        if (currentChannel === 'team') {
+            shouldShowDot = false;
+            if (teamCode === '\u0009') { // If T is selected
+                channelText = 'T';
+                prefix = '\u0009';
+                suffix = '\u0004﹫T Start';
+                playerTeamCode = '\u0009';
+            } else { // If CT is selected
+                channelText = 'CT';
+                prefix = '\u000B';
+                suffix = '\u0004﹫CT Start';
+                playerTeamCode = '\u000B';
+            }
+        } else if (currentChannel === 'all') {
+            channelText = 'ALL';
+            prefix = '\u0001';
+        } else if (currentChannel === 'spec') {
+            channelText = 'ALL';
+            prefix = '\u0001';
+            suffix = '\u0008 [SPEC]';
+            playerTeamCode = '\u0001';
+        }
+
+        const dotPart = currentChannel === 'spec' ? '' : `${colorCode}● `;
+
+        preview.textContent = `playerchatwheel CW.1 "Ping Site A ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ${prefix}[${channelText}] ${dotPart}${playerTeamCode}${player}${suffix}\u0001: ${message}`;
+
+        // Update visual preview
+        const chatMessage = document.querySelector('.chat-message');
+        let visualHTML = '';
+        
+        if (currentChannel === 'team') {
+            const dotColorClass = `dot-${playerColorSelect.value}`;
+            if (teamCode === '\u0009') { // T team
+                visualHTML = `<span class="team-t">[T] </span><span class="${dotColorClass}">●</span> <span class="team-t">${player}</span><span class="chat-green">@T Start</span>`;
+            } else { // CT team
+                visualHTML = `<span class="team-ct">[CT] </span><span class="${dotColorClass}">●</span> <span class="team-ct">${player}</span><span class="chat-green">@CT Start</span>`;
+            }
+        } else if (currentChannel === 'spec') {
+            visualHTML = `<span class="white">[ALL] ${player}</span><span class="chat-spec"> [SPEC]</span>`;
+        } else {
+            // Add dot color based on playerColorSelect.value
+            const dotColorClass = `dot-${playerColorSelect.value}`;
+            // Add player name color based on team
+            const teamColorClass = teamCode === '\u0009' ? 'team-t' : 'team-ct';
+            visualHTML = `<span class="white">[ALL] </span><span class="${dotColorClass}">●</span> <span class="${teamColorClass}">${player}</span>`;
+        }
+        
+        chatMessage.innerHTML = `${visualHTML}: ${message}`;
+    }
+
+
+    function copyToClipboard() {
+      const textToCopy = preview.textContent;
+      navigator.clipboard.writeText(textToCopy).catch(err => {
+        console.error('Failed to copy:', err);
+      });
+      savePlayerSettings();
+    }
+
+    function savePlayerSettings() {
+      const playerName = playerInput.value;
+      if (!playerName) return;
+
+      playerSettings[playerName] = {
+        color: playerColorSelect.value,
+        team: teamCode,
+        channel: currentChannel,
+        message: messageInput.value
+      };
+
+      // Update both dropdowns
+      [savedPlayers, document.getElementById('miscSavedPlayers')].forEach(dropdown => {
+        if (!Array.from(dropdown.options).some(option => option.value === playerName)) {
+          const newOption = document.createElement('option');
+          newOption.value = playerName;
+          newOption.textContent = playerName;
+          dropdown.appendChild(newOption);
+        }
+      });
+    }
+
+    function loadPlayerSettings() {
+      const selectedPlayer = savedPlayers.value;
+      if (!selectedPlayer || !playerSettings[selectedPlayer]) return;
+
+      const settings = playerSettings[selectedPlayer];
+      playerInput.value = selectedPlayer;
+      playerColorSelect.value = settings.color;
+      teamCode = settings.team;
+      currentChannel = settings.channel;
+      messageInput.value = settings.message;
+
+      // Update the active button based on the loaded team
+      if (teamCode === '\u000B') {
+        ctButton.classList.add('active');
+        tButton.classList.remove('active');
+      } else {
+        tButton.classList.add('active');
+        ctButton.classList.remove('active');
+      }
+
+      // Update the active button based on the loaded channel
+      setChannel(currentChannel);
+
+      updatePreview();
+    }
+
+    function loadMiscPlayer() {
+      const selectedPlayer = document.getElementById('miscSavedPlayers').value;
+      if (selectedPlayer) {
+        document.getElementById('miscPlayerName').value = selectedPlayer;
+      }
+    }
+
+    function copyKickMessage() {
+      const playerName = document.getElementById('miscPlayerName').value;
+      if (!playerName) {
+        alert('Please select a player first');
+        return;
+      }
+
+      const kickMessage = `playerchatwheel CW.1 "Ping Site A ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      Player ${playerName} left the game (Kicked from the session)"`;
+
+      navigator.clipboard.writeText(kickMessage).catch(err => {
+        console.error('Failed to copy:', err);
+      });
+    }
+    
+    function copyVacMessage() {
+      const playerName = document.getElementById('miscPlayerName').value;
+      if (!playerName) {
+        alert('Please select a player first');
+        return;
+      }
+
+      const vacMessage = `playerchatwheel CW.1 "Ping Site A ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      Player ${playerName} has left the server (VAC Banned from secure server)"`;
+
+      navigator.clipboard.writeText(vacMessage).catch(err => {
+        console.error('Failed to copy:', err);
+      });
+    }
+    
+    function copyJoinCT() {
+      const playerName = document.getElementById('miscPlayerName').value;
+      if (!playerName) {
+        alert('Please select a player first');
+        return;
+      }
+
+      const joinCT = `playerchatwheel CW.1 "Ping Site A ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      \u000B${playerName} is joining the Counter-Terrorists"`;
+
+      navigator.clipboard.writeText(joinCT).catch(err => {
+        console.error('Failed to copy:', err);
+      });
+    }
+    
+    function copyJoinT() {
+      const playerName = document.getElementById('miscPlayerName').value;
+      if (!playerName) {
+        alert('Please select a player first');
+        return;
+      }
+
+      const joinT = `playerchatwheel CW.1 "Ping Site A ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      \u0010${playerName} is joining the Terrorists"`;
+
+      navigator.clipboard.writeText(joinT).catch(err => {
+        console.error('Failed to copy:', err);
+      });
+    }
+
+      function copyJoinSpec() {
+      const playerName = document.getElementById('miscPlayerName').value;
+      if (!playerName) {
+        alert('Please select a player first');
+        return;
+      }
+
+      const joinSPEC = `playerchatwheel CW.1 "Ping Site A ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      \u0001${playerName} is joining the Spectators"`;
+
+      navigator.clipboard.writeText(joinSPEC).catch(err => {
+        console.error('Failed to copy:', err);
+      });
+    }
+
+    function copyCustomMessage() {
+        const div = document.getElementById('customText');
+        let text = div.textContent;
+        
+        // Map for converting preview symbols back to unicode
+        const unicodeMap = {
+            '₀': '\u0001',  // White
+            '₁': '\u0002',  // Dark Red
+            '₂': '\u0007',  // Red
+            '₃': '\u000F',  // Light Red
+            '₄': '\u000C',  // Dark Blue
+            '₅': '\u000B',  // Blue
+            '₆': '\u0004',  // Dark Green
+            '₇': '\u0006',  // Green
+            '₈': '\u0005',  // Light Green
+            '₉': '\u0008',  // Grey
+            'ₘ': '\u0009',  // Yellow
+            'ₙ': '\u0010',  // Gold
+            'ₚ': '\u000E'   // Orchid
+        };
+        
+        // Replace all preview symbols with their unicode equivalents
+        Object.entries(unicodeMap).forEach(([preview, unicode]) => {
+            text = text.replaceAll(preview, unicode);
+        });
+
+        const formattedMessage = `playerchatwheel CW.1 "Ping Site A ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ${text}"`;
+
+        navigator.clipboard.writeText(formattedMessage);
+    }
+
+    function insertColor(unicode) {
+        const div = document.getElementById('customText');
+        const selection = window.getSelection();
+        const range = selection.getRangeAt(0);
+        
+        // Map unicode to preview symbols
+        const previewMap = {
+            '\u0001': '₀',  // White
+            '\u0002': '₁',  // Dark Red
+            '\u0007': '₂',  // Red
+            '\u000F': '₃',  // Light Red
+            '\u000C': '₄',  // Dark Blue
+            '\u000B': '₅',  // Blue
+            '\u0004': '₆',  // Dark Green
+            '\u0006': '₇',  // Green
+            '\u0005': '₈',  // Light Green
+            '\u0008': '₉',  // Grey
+            '\u0009': 'ₘ',  // Yellow
+            '\u0010': 'ₙ',  // Gold
+            '\u000E': 'ₚ'   // Orchid
+        };
+        
+        const colorMap = {
+            '₀': '#ffffff',  // White
+            '₁': '#ff0000',  // Dark Red
+            '₂': '#ff4141',  // Red
+            '₃': '#eb4c4c',  // Light Red
+            '₄': '#4c6aff',  // Dark Blue
+            '₅': '#5f99d9',  // Blue
+            '₆': '#41ff41',  // Dark Green
+            '₇': '#a3ff48',  // Green
+            '₈': '#c0ff91',  // Light Green
+            '₉': '#c6cbd0',  // Grey
+            'ₘ': '#ede47b',  // Yellow
+            'ₙ': '#e4af3a',  // Gold
+            'ₚ': '#d32de6'   // Orchid
+        };
+        
+        // Insert the preview symbol
+        const span = document.createElement('span');
+        const previewSymbol = previewMap[unicode];
+        span.appendChild(document.createTextNode(previewSymbol));
+        span.style.color = colorMap[previewSymbol];
+        
+        range.deleteContents();
+        range.insertNode(span);
+        
+        // Place cursor after the span
+        range.setStartAfter(span);
+        range.collapse(true);
+        selection.removeAllRanges();
+        selection.addRange(range);
+        
+        div.focus();
+    }
+
+    playerInput.addEventListener('input', updatePreview);
+    messageInput.addEventListener('input', updatePreview);
+    playerColorSelect.addEventListener('change', updatePreview);
+
+    // Initialize default active button
+    ctButton.classList.add('active');
+
+    function copyUnboxMessage() {
+        const name = document.getElementById('unboxPlayerName').value;
+        const item = document.getElementById('itemName').value;
+        const starred = document.getElementById('isKnifeGloves').checked ? "★" : "";
+        const paintkit = document.getElementById('paintKit').value;
+        const stattrak = document.getElementById('isStatTrak').checked ? " StatTrak™" : "";
+        const rarity = String.fromCharCode(eval(document.getElementById('itemRarity').value));
+
+        const message = `playerchatwheel CW.1 "Ping Site A ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        \u0003${name} \u0001has opened a container and found: ${rarity}${starred}${stattrak} ${item} | ${paintkit}"`;
+        
+        navigator.clipboard.writeText(message);
+    }
+  </script>
+</body>
+</html>
+
