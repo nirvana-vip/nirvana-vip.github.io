@@ -678,6 +678,9 @@
 
     <div>
         <h1 class="ms-gothic-font">FREESIA  寻找</h1>
+        <a href="/msg" style="display: block; width: 300px;  margin: 0px auto; cursor: none;">
+            <img src="images/cs_tool.png" alt="COUNTERSTRIKE EXTERNAL TOOL" style="width: 230px; top: 20px; left: 330px; height: auto; position: absolute; mix-blend-mode: normal;" class="ms-gothic-font">
+        </a>
     </div>
     
     <!-- Stock Chart Container -->
@@ -798,7 +801,7 @@
             <li class="marquee__item ms-gothic-font-light">UNREGULATED FUN</li>
             <li class="marquee__item ms-gothic-font-light">the stars align</li>
             <li class="marquee__item ms-gothic-font-light">WISDOM WISDOM</li>
-            <li class="marquee__item ms-gothic-font-light">CONTROL CONTROL</li>
+            <li class="marquee__item ms-gothic-font-light"></li>
             
         </ul>
         <ul class="marquee__content" aria-hidden="true">
@@ -1002,5 +1005,13 @@
        
         
     </script>
+<script>
+    // Prevent spacebar scrolling
+    window.addEventListener('keydown', function(e) {
+        if (e.code === 'Space' && e.target === document.body) {
+            e.preventDefault();
+        }
+    });
+</script>
 </body>
 </html>
