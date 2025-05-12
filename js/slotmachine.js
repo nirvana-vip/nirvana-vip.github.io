@@ -36,7 +36,7 @@ var cols;
 
 // Cookie functions for balance persistence
 function saveBalanceToCookie() {
-    document.cookie = `balance=${balance};path=/;max-age=31536000`; // Store for 1 year
+    document.cookie = `balance=${balance};path=/;max-age=31536000;SameSite=Lax`; // Store for 1 year
 }
 
 function getBalanceFromCookie() {
@@ -201,8 +201,22 @@ window.addEventListener('DOMContentLoaded', function(event) {
 /**
  * @param elem The button itself
  */
+// Global variable to track if spin is in progress
+let isSpinning = false;
+
+// Add keyboard event listener for spacebar
+document.addEventListener('keydown', function(event) {
+    if (event.code === 'Space' && !isSpinning) {
+        event.preventDefault(); // Prevent page scrolling
+        const startButton = document.querySelector('.start-button');
+        if (startButton) {
+            spin(startButton);
+        }
+    }
+});
+
 function spin(elem) {
-    if (elem.hasAttribute('disabled')) {
+    if (elem.hasAttribute('disabled') || isSpinning) {
         playError();
         return;
     }
@@ -241,6 +255,7 @@ function spin(elem) {
     elem.style.pointerEvents = 'none';
     elem.style.opacity = '0.5';
     
+    isSpinning = true;
     slots.classList.toggle('spinning', true);
     window.setTimeout(setResult, 1500);
 
@@ -248,6 +263,7 @@ function spin(elem) {
         slots.classList.toggle('spinning', false);
         elem.removeAttribute('disabled');
         elem.style.pointerEvents = '';
+        isSpinning = false;
         elem.style.opacity = '';
         elem.focus();
         checkJackpot();
