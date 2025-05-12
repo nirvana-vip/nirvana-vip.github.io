@@ -237,6 +237,7 @@
 
 
   <div class="container">
+    
 
     <div class="tabs">
       <button class="tab-button" data-tab="fakeChat">chat</button>
@@ -247,6 +248,10 @@
 
     <div id="fakeChat" class="tab-content">
 
+      <div id="balance-display" style="text-align: center; padding: 0px; color: rgb(0, 0, 0); font-family: '宋体', sans-serif;">
+        <span>balance </span><span id="balance">0〠</span>
+      </div>
+      
       <h1>Ecilhlja v1.2</h1>
 
       <img src="../images/skull.png" alt="Overlay Image" class="overlay2" style="width: 150px; height: auto; display: block; margin: 0 auto;">
@@ -291,6 +296,7 @@
       </div>
     
       <button onclick="copyToClipboard()">copy</button>
+      
     </div>
 
 
@@ -512,11 +518,39 @@
     }
 
 
+    // Get balance functions from parent
+    function getBalanceFromCookie() {
+      const match = document.cookie.match(/balance=([^;]+)/);
+      const parsedBalance = match ? parseInt(match[1]) : 45;
+      return isNaN(parsedBalance) ? 0 : parsedBalance;
+    }
+
+    function saveBalanceToCookie() {
+      const safeBalance = isNaN(window.balance) ? 0 : window.balance;
+      document.cookie = `balance=${safeBalance};path=/;max-age=31536000`;
+    }
+
+    // Initialize balance
+    window.balance = getBalanceFromCookie();
+    document.getElementById('balance').textContent = window.balance + '〠';
+
+    function updateBalance(amount) {
+      const el = document.getElementById('balance');
+      window.balance = (isNaN(window.balance) ? 0 : window.balance) + amount;
+      el.textContent = window.balance + '〠';
+      saveBalanceToCookie();
+    }
+
     function copyToClipboard() {
+      if (balance < 1) {
+        new Audio('../audio/ui_error.mp3').play();
+        return;
+      }
       const textToCopy = preview.textContent;
       navigator.clipboard.writeText(textToCopy).catch(err => {
         console.error('Failed to copy:', err);
       });
+      updateBalance(-1);
       savePlayerSettings();
     }
 
@@ -576,11 +610,16 @@
     }
 
     function copyKickMessage() {
+      if (balance < 1) {
+        new Audio('../audio/ui_error.mp3').play();
+        return;
+      }
       const playerName = document.getElementById('miscPlayerName').value;
       if (!playerName) {
         alert('Please select a player first');
         return;
       }
+      updateBalance(-1);
 
       const kickMessage = `playerchatwheel CW.1 "Ping Site A ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
       Player ${playerName} left the game (Kicked from the session)"`;
@@ -591,11 +630,16 @@
     }
     
     function copyVacMessage() {
+      if (balance < 1) {
+        new Audio('../audio/ui_error.mp3').play();
+        return;
+      }
       const playerName = document.getElementById('miscPlayerName').value;
       if (!playerName) {
         alert('Please select a player first');
         return;
       }
+      updateBalance(-1);
 
       const vacMessage = `playerchatwheel CW.1 "Ping Site A ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
       Player ${playerName} has left the server (VAC Banned from secure server)"`;
@@ -606,6 +650,10 @@
     }
     
     function copyJoinCT() {
+      if (balance < 1) {
+        new Audio('../audio/ui_error.mp3').play();
+        return;
+      }
       const playerName = document.getElementById('miscPlayerName').value;
       if (!playerName) {
         alert('Please select a player first');
@@ -621,6 +669,10 @@
     }
     
     function copyJoinT() {
+      if (balance < 1) {
+        new Audio('../audio/ui_error.mp3').play();
+        return;
+      }
       const playerName = document.getElementById('miscPlayerName').value;
       if (!playerName) {
         alert('Please select a player first');
@@ -636,6 +688,10 @@
     }
 
       function copyJoinSpec() {
+      if (balance < 1) {
+        new Audio('../audio/ui_error.mp3').play();
+        return;
+      }
       const playerName = document.getElementById('miscPlayerName').value;
       if (!playerName) {
         alert('Please select a player first');
@@ -651,8 +707,13 @@
     }
 
     function copyCustomMessage() {
+        if (balance < 1) {
+          new Audio('../audio/ui_error.mp3').play();
+          return;
+        }
         const div = document.getElementById('customText');
         let text = div.textContent;
+        updateBalance(-1);
         
         // Map for converting preview symbols back to unicode
         const unicodeMap = {
@@ -746,8 +807,13 @@
     ctButton.classList.add('active');
 
     function copyUnboxMessage() {
+        if (balance < 1) {
+          new Audio('../audio/ui_error.mp3').play();
+          return;
+        }
         const name = document.getElementById('unboxPlayerName').value;
         const item = document.getElementById('itemName').value;
+        updateBalance(-1);
         const starred = document.getElementById('isKnifeGloves').checked ? "★" : "";
         const paintkit = document.getElementById('paintKit').value;
         const stattrak = document.getElementById('isStatTrak').checked ? " StatTrak™" : "";
